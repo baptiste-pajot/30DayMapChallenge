@@ -1,0 +1,18 @@
+# Mapbox tokens (each day has its own config.js; config.example.js is the template)
+config.js
+
+# Shell / tool dotfiles that end up in the repo root
+.bash_profile
+.bashrc
+.gitconfig
+.gitmodules
+.profile
+.ripgreprc
+.zprofile
+.zshrc
+.mcp.json
+.claude/
+
+# Editors
+.idea
+.vscode

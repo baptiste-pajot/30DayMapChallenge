@@ -5,46 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link href="https://api.mapbox.com/mapbox-gl-js/v3.9.0/mapbox-gl.css" rel="stylesheet" />
   <title>Day 1 · Points — Spherical centroid</title>
+  <link href="../utils/panel.css" rel="stylesheet" />
   <style>
-    html, body { margin: 0; height: 100%; overflow: hidden; background: #000; font-family: system-ui, sans-serif; }
     #map { position: absolute; inset: 0; }
-    #panel {
-      position: absolute; top: 16px; left: 16px; width: 280px; max-height: calc(100% - 32px);
-      display: flex; flex-direction: column; gap: 10px; padding: 14px 16px;
-      background: rgba(10, 14, 24, 0.78); color: #e8eef7; border-radius: 10px;
-      backdrop-filter: blur(6px); box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
-    }
-    h1 { margin: 0; font-size: 17px; }
-    p { margin: 0; font-size: 12.5px; line-height: 1.45; color: #aab6c8; }
-    .buttons { display: flex; gap: 6px; }
-    button {
-      flex: 1; padding: 6px 0; border: 1px solid #3a4a63; border-radius: 6px;
-      background: #1b2638; color: #e8eef7; cursor: pointer; font-size: 12.5px;
-    }
-    button:hover { background: #26354e; }
-    #centroid { font-size: 13px; padding: 8px 10px; border-radius: 6px; background: rgba(255, 196, 0, 0.12); border: 1px solid rgba(255, 196, 0, 0.4); }
-    #centroid b { color: #ffc400; }
-    #centroid .sub { color: #aab6c8; font-size: 11.5px; }
-    .mapboxgl-popup-content { font-size: 12px; padding: 6px 10px; }
-    #token-warning {
-      position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); max-width: 420px;
-      padding: 18px 22px; border-radius: 10px; background: #2a1420; color: #ffd6de; font-size: 14px; line-height: 1.5;
-    }
-    #token-warning code { background: rgba(255, 255, 255, 0.1); padding: 1px 5px; border-radius: 4px; }
-    .table-wrap { overflow-y: auto; }
-    table { width: 100%; border-collapse: collapse; font-size: 12px; font-variant-numeric: tabular-nums; color: #c9d4e3; }
-    th { position: sticky; top: 0; background: #141c2a; text-align: left; font-weight: 600; color: #aab6c8; padding: 4px; }
-    td { padding: 2px 4px; }
-    td:first-child { color: #ff4d6d; width: 18px; }
-    td input {
-      width: 100%; box-sizing: border-box; padding: 3px 5px; border: 1px solid #2c3a52; border-radius: 4px;
-      background: #0e1522; color: #e8eef7; font: inherit;
-    }
-    td input:focus { outline: none; border-color: #7fb8ff; }
-    td input.invalid { border-color: #ff4d6d; background: rgba(255, 77, 109, 0.12); }
-    td button { flex: none; width: 22px; padding: 2px 0; font-size: 11px; }
-    .legend { display: flex; gap: 14px; font-size: 12px; color: #aab6c8; }
-    .dot { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 5px; vertical-align: middle; }
   </style>
 </head>
 <body>
@@ -63,7 +26,7 @@
       <button id="undo">Undo</button>
       <button id="clear">Clear</button>
     </div>
-    <div id="centroid">Add points to compute the centroid.</div>
+    <div id="centroid" class="info" style="--accent: #ffc400">Add points to compute the centroid.</div>
     <div class="table-wrap">
       <table>
         <thead><tr><th>#</th><th>Lat (°)</th><th>Lng (°)</th><th></th></tr></thead>
@@ -72,14 +35,12 @@
     </div>
   </div>
 
-  <div id="token-warning" hidden>
-    <b>Mapbox token missing.</b> Copy <code>config.example.js</code> to <code>config.js</code>
-    and set <code>MAPBOX_TOKEN</code> to your public token (<code>pk.…</code>).
-  </div>
 
   <script src="https://api.mapbox.com/mapbox-gl-js/v3.9.0/mapbox-gl.js"></script>
-  <script src="config.js"></script>
-  <script src="geo.js"></script>
+  <script src="../utils/config.js"></script>
+  <script src="../utils/geo.js"></script>
+  <script src="../utils/map.js"></script>
+  <script src="centroid.js"></script>
   <script src="app.js"></script>
 </body>
 </html>

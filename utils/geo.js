@@ -1,4 +1,4 @@
-// Spherical geometry helpers: great-circle distance and path.
+// Shared spherical geometry: unit vectors, central angles and great-circle paths.
 const DEG = Math.PI / 180;
 const EARTH_RADIUS_KM = 6371;
 
@@ -14,6 +14,9 @@ const toLatLng = ([x, y, z]) => ({ lat: Math.asin(clamp1(z)) / DEG, lng: Math.at
 
 // Central angle between two points, in radians (multiply by EARTH_RADIUS_KM for km).
 const angle = (a, b) => Math.acos(clamp1(dot(toVector(a), toVector(b))));
+
+// Uniform on the sphere (not uniform in lat/lng)
+const randomPoint = () => ({ lat: Math.asin(2 * Math.random() - 1) / DEG, lng: Math.random() * 360 - 180 });
 
 // Great-circle path from a to b as [lng, lat] pairs (~1 segment per degree).
 // Longitudes are unwrapped (may exceed ±180) so the line doesn't jump across the antimeridian.
