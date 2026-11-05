@@ -14,9 +14,17 @@ const map = createMap('map', {
       layout: { 'line-cap': 'round', 'line-join': 'round' },
       paint: { 'line-width': 2.5, 'line-gradient': ['interpolate', ['linear'], ['line-progress'], 0, RED, 1, YELLOW] },
     });
+    // Discrete ties are drawn as hollow yellow rings wider than a point marker (6 px + 1.5 px stroke), so a
+    // tie sitting exactly on a point (e.g. tetrahedron) stays visible around it; dense ties are small dots.
     map.addLayer({
       id: 'ties', type: 'circle', source: 'ties',
-      paint: { 'circle-radius': ['get', 'radius'], 'circle-color': YELLOW, 'circle-stroke-width': 1, 'circle-stroke-color': '#000' },
+      paint: {
+        'circle-radius': ['get', 'radius'],
+        'circle-color': YELLOW,
+        'circle-opacity': ['case', ['get', 'ring'], 0, 1],
+        'circle-stroke-width': ['case', ['get', 'ring'], 3, 1],
+        'circle-stroke-color': ['case', ['get', 'ring'], YELLOW, '#000'],
+      },
     });
     map.addLayer({
       id: 'centroid-pulse', type: 'circle', source: 'centroid',
@@ -80,7 +88,10 @@ function renderScene() {
     points: featureCollection(points.map((p, i) =>
       pointFeature(p, { i, n: i + 1, label: `#${i + 1} · ${fmt(p)}<br><i>click to remove</i>` }))),
     centroid: featureCollection(c ? [pointFeature(c, { label: `Centroid · ${fmt(c)}` })] : []),
-    ties: featureCollection(ties.map(t => pointFeature(t, { radius: ties.length > 12 ? 2.5 : 7, label: `Tied centre · ${fmt(t)}` }))),
+    ties: featureCollection(ties.map(t => pointFeature(t, {
+      ...(ties.length > 12 ? { radius: 2.5, ring: false } : { radius: 11, ring: true }),
+      label: `Tied centre · ${fmt(t)}`,
+    }))),
     lines: featureCollection(c && points.length > 1 ? points.map(p => lineFeature(greatCircle(p, c))) : []),
   };
   setSources([map], data);
