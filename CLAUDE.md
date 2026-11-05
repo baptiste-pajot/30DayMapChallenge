@@ -23,6 +23,8 @@ Quick checks without a browser:
 
 A day's `index.html` loads, in order: Mapbox GL JS (CDN), `../utils/config.js`, `../utils/geo.js`, `../utils/map.js`, any day-specific maths file (e.g. `centroid.js`), then `app.js`. Classic scripts share one global scope, so a day file must not redeclare a top-level name from utils (`DEG`, `fmt`, `LIMITS`, …) — a duplicate `const` is a SyntaxError that silently kills the whole script.
 
+Day 3 (`03_polygons`) is the exception: no Mapbox GL, so it loads only `config.js`, `geo.js`, `polyhedra.js`, `app.js`. It draws with raw WebGL2 and stitches a Web Mercator texture from the Mapbox Static Tiles API (CORS images, so `file://` still works); the fragment shader does the gnomonic face → lat/lng → Mercator lookup per pixel. `polyhedra.js` is DOM-free and testable with `node` like the other maths files.
+
 ## Patterns in each day's `app.js`
 
 - **State → render**: a `points` array is the single source of truth. `update()` = `renderScene()` (rebuild the `data` FeatureCollections, `setSources`) + `renderCoordTable(...)`. The table's `onEdit` calls only `renderScene()` so inputs keep focus while typing.
