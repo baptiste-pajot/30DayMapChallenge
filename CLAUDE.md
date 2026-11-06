@@ -25,6 +25,8 @@ A day's `index.html` loads, in order: Mapbox GL JS (CDN), `../utils/config.js`, 
 
 Day 3 (`03_polygons`) is the exception: no Mapbox GL, so it loads only `config.js`, `geo.js`, `polyhedra.js`, `app.js`. It draws with raw WebGL2 and stitches a Web Mercator texture from the Mapbox Static Tiles API (CORS images, so `file://` still works); the fragment shader does the gnomonic face → lat/lng → Mercator lookup per pixel. `polyhedra.js` is DOM-free and testable with `node` like the other maths files.
 
+Day 4 (`04_clusters`) is a flat map of mainland France (Lambert conformal conic, Lambert‑93 parallels), not the globe. Its OSM data is a committed snapshot in `04_clusters/data/<category>.js` (classic scripts setting `POIS.<category>`, injected on demand since `fetch` of local files fails on `file://`), refreshed with `node 04_clusters/fetch_data.js [category…]` (Overpass, CSV output, falls back across public endpoints; 1–3 min per category). The page queries Overpass live only on "Reload from OSM" or a missing snapshot. Points are clustered by Mapbox's own `cluster: true` GeoJSON source.
+
 ## Patterns in each day's `app.js`
 
 - **State → render**: a `points` array is the single source of truth. `update()` = `renderScene()` (rebuild the `data` FeatureCollections, `setSources`) + `renderCoordTable(...)`. The table's `onEdit` calls only `renderScene()` so inputs keep focus while typing.
