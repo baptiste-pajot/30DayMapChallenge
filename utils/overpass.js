@@ -1,5 +1,5 @@
-// Day 4 · OpenStreetMap points of interest in mainland France, via the Overpass API. Everything above the
-// "Loading in the page" section is DOM-free, so fetch_data.js (node) reuses it to write the local snapshot.
+// OpenStreetMap points of interest in mainland France, via the Overpass API. Everything above the
+// "Loading in the page" section is DOM-free, so fetch_osm.js (node) reuses it to write the local snapshot.
 
 // Mainland France + Corsica. The bbox drops the overseas regions that the France boundary relation also contains.
 const FRANCE_BBOX = [41.2, -5.6, 51.3, 9.8];  // south, west, north, east (Overpass order)
@@ -58,14 +58,14 @@ async function fetchOverpass(filter, { onAttempt, onError, headers = {} } = {}) 
 
 // ---------- Loading in the page ----------
 
-// Local snapshot written by fetch_data.js: data/<key>.js sets POIS.<key>. Injected as a <script> on demand
+// Local snapshot written by utils/fetch_osm.js: utils/osm/<key>.js sets POIS.<key>. Injected as a <script> on demand
 // (works from file://, unlike fetch); resolves to null if the file is missing.
 const POIS = window.POIS = window.POIS || {};
 function loadSnapshot(key) {
   if (POIS[key]) return Promise.resolve(POIS[key]);
   return new Promise(resolve => {
     const script = document.createElement('script');
-    script.src = `data/${key}.js`;
+    script.src = `../utils/osm/${key}.js`;  // relative to the day page
     script.onload = () => resolve(POIS[key] || null);
     script.onerror = () => resolve(null);
     document.head.appendChild(script);
@@ -79,4 +79,17 @@ async function loadCategory(key, { force = false, onAttempt } = {}) {
   const rows = await fetchOverpass(CATEGORIES[key].filter, { onAttempt });
   POIS[key] = { date: new Date().toISOString().slice(0, 10), rows };
   return { rows, date: POIS[key].date, source: 'live Overpass query' };
+}
+
+// One button per category in `box`; the active one is highlighted with its colour. onSelect(key) on click.
+function renderCategoryButtons(box, active, onSelect) {
+  box.innerHTML = '';
+  for (const [key, c] of Object.entries(CATEGORIES)) {
+    const b = document.createElement('button');
+    b.textContent = c.label;
+    b.classList.toggle('active', key === active);
+    b.style.setProperty('--accent', c.color);
+    b.onclick = () => { if (key !== active) onSelect(key); };
+    box.appendChild(b);
+  }
 }

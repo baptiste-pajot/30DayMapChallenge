@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://api.mapbox.com/mapbox-gl-js/v3.9.0/mapbox-gl.css" rel="stylesheet" />
+  <title>Day 5 · Heatmap — Bars, schools and churches of France</title>
+  <link href="../utils/panel.css" rel="stylesheet" />
+  <style>
+    #map { position: absolute; inset: 0; }
+    .buttons button.active { background: #3a4a63; border-color: var(--accent); color: #fff; }
+    .ramp { height: 10px; border-radius: 5px; }
+    .ramp-labels { display: flex; justify-content: space-between; font-size: 11px; color: #aab6c8; margin-top: 3px; }
+    label { font-size: 12.5px; color: #c9d4e3; display: flex; gap: 6px; align-items: flex-start; cursor: pointer; }
+    label input { margin-top: 2px; }
+    .credit { font-size: 11px; color: #7d8aa0; }
+    .credit a { color: #9ec5ff; }
+  </style>
+</head>
+<body>
+  <div id="map"></div>
+
+  <div id="panel">
+    <h1>#30DayMapChallenge · Day 5: Heatmap</h1>
+    <p>The same OpenStreetMap bars, schools and churches as Day 4, drawn as a <b>density surface</b>. Each point
+      spreads a small blob of heat, and the blobs add up where points are close together. Zoom in past
+      level 12 to see the individual points.</p>
+    <div class="buttons" id="categories"></div>
+    <div id="status" class="info" style="--accent: #ff8c42">Loading…</div>
+    <div>
+      <div class="ramp" id="ramp"></div>
+      <div class="ramp-labels"><span>sparse</span><span>dense</span></div>
+    </div>
+    <label><input type="checkbox" id="normalise" checked>
+      <span>Same total heat for every category: compares <i>where</i> each one gathers, not how many there are</span></label>
+    <p class="credit">Data © <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a>
+      contributors (ODbL), downloaded through the Overpass API. Projection: Lambert conformal conic, parallels
+      44°N / 49°N (as in Lambert‑93).</p>
+  </div>
+
+  <script src="https://api.mapbox.com/mapbox-gl-js/v3.9.0/mapbox-gl.js"></script>
+  <script src="../utils/config.js"></script>
+  <script src="../utils/geo.js"></script>
+  <script src="../utils/map.js"></script>
+  <script src="../utils/overpass.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

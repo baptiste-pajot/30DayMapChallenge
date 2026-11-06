@@ -1,4 +1,4 @@
-// Day 4 · Clusters: OSM bars / schools / churches of France, clustered by Mapbox. Depends on utils/*.js and overpass.js.
+// Day 4 · Clusters: OSM bars / schools / churches of France, clustered by Mapbox. Depends on utils/*.js (incl. overpass.js).
 
 // Cluster size classes on point_count: [lower bound, radius px, fill opacity]. The first class starts at 2.
 const CLUSTER_STEPS = [[2, 14, 0.55], [25, 20, 0.65], [250, 28, 0.75], [2500, 38, 0.85]];
@@ -78,16 +78,7 @@ const statusBox = document.getElementById('status');
 const setStatus = html => { statusBox.innerHTML = html; };
 
 function renderPanel() {
-  const box = document.getElementById('categories');
-  box.innerHTML = '';
-  for (const [key, c] of Object.entries(CATEGORIES)) {
-    const b = document.createElement('button');
-    b.textContent = c.label;
-    b.classList.toggle('active', key === category);
-    b.style.setProperty('--accent', c.color);
-    b.onclick = () => { if (key !== category) select(key); };
-    box.appendChild(b);
-  }
+  renderCategoryButtons(document.getElementById('categories'), category, select);
   statusBox.style.setProperty('--accent', CATEGORIES[category].color);
   const color = CATEGORIES[category].color;
   document.getElementById('scale').innerHTML = 'Cluster size:' + CLUSTER_STEPS.map(([n, r, o], i) => {
