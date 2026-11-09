@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://api.mapbox.com/mapbox-gl-js/v3.9.0/mapbox-gl.css" rel="stylesheet" />
+  <title>Day 6 · Vintage — Old maps on the globe</title>
+  <link href="../utils/panel.css" rel="stylesheet" />
+  <style>
+    #map { position: absolute; inset: 0; }
+    /* Aged-paper vignette over the map (never intercepts the mouse). */
+    #paper {
+      position: absolute; inset: 0; pointer-events: none; z-index: 1;
+      background: radial-gradient(ellipse at center, transparent 55%, rgba(70, 45, 15, 0.45) 100%);
+      box-shadow: inset 0 0 0 10px #3b2a17, inset 0 0 0 12px #c9a96b, inset 0 0 0 14px #3b2a17;
+    }
+    body.sepia .mapboxgl-canvas { filter: sepia(0.85) saturate(0.8) contrast(1.05) brightness(0.95); }
+
+    /* Panel as a cartouche: parchment, ink, serif. */
+    #panel { background: rgba(239, 227, 194, 0.93); color: #3b2a17; font-family: Georgia, 'Times New Roman', serif; z-index: 2;
+             border: 1px solid #8a6a3a; box-shadow: 0 4px 20px rgba(40, 25, 5, 0.5); }
+    #panel h1 { font-variant: small-caps; letter-spacing: 0.04em; }
+    #panel p, .info .sub { color: #5e4a30; }
+    #panel button { background: #e3d3a8; color: #3b2a17; border-color: #8a6a3a; font-family: inherit; }
+    #panel button:hover { background: #d8c48f; }
+    #panel button.active { background: #5a3d1e; color: #f3e8cc; }
+    .modes { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+    .modes button { padding: 6px 4px; line-height: 1.2; }
+    .modes small { display: block; opacity: 0.75; font-size: 10.5px; }
+    label.slider { display: flex; align-items: center; gap: 8px; font-size: 12.5px; }
+    label.slider input { flex: 1; accent-color: #5a3d1e; }
+    .mapboxgl-ctrl-attrib { font-family: Georgia, serif; }
+  </style>
+</head>
+<body>
+  <div id="map"></div>
+  <div id="paper"></div>
+
+  <div id="panel">
+    <h1>#30DayMapChallenge · Day 6: Vintage</h1>
+    <p>The same globe as Days 1–2, inked on parchment. Over France it shows the <b>Carte de Cassini</b>, the first
+      map of a whole country built on a triangulation network, and the <b>Carte d'état-major</b> that replaced it.
+      Both are scanned and served by IGN / BnF.</p>
+    <div class="modes" id="modes"></div>
+    <label class="slider" id="opacity-row">Old map opacity <input id="opacity" type="range" min="0" max="1" step="0.05" value="1"></label>
+    <div id="about" class="info" style="--accent: #8a3b12"></div>
+  </div>
+
+  <script src="https://api.mapbox.com/mapbox-gl-js/v3.9.0/mapbox-gl.js"></script>
+  <script src="../utils/config.js"></script>
+  <script src="../utils/geo.js"></script>
+  <script src="../utils/map.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

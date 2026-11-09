@@ -28,6 +28,8 @@ Day 3 (`03_polygons`) is the exception: no Mapbox GL, so it loads only `config.j
 
 Days 4 (`04_clusters`) and 5 (`05_sight`) share one dataset: OSM bars / schools / churches of mainland France, on a flat map (Lambert conformal conic, Lambert‑93 parallels) instead of the globe. Day 4 shows them with Mapbox's `cluster: true` GeoJSON source, Day 5 as a `heatmap` layer (optionally weighted 1/N so categories compare by distribution, not count). Both also load `../utils/overpass.js` (`CATEGORIES`, Overpass query/CSV parsing, `loadCategory`, `renderCategoryButtons`). The data is a committed snapshot in `utils/osm/<category>.js` (classic scripts setting `POIS.<category>`, injected on demand since `fetch` of local files fails on `file://`), refreshed with `node utils/fetch_osm.js [category…]` (1–3 min per category; inside the sandbox it needs `NODE_USE_ENV_PROXY=1`). Pages query Overpass live only when a snapshot is missing (or on Day 4's "Reload from OSM").
 
+Day 6 (`06_vintage`) is the Day 1–2 globe on `light-v11`, recoloured at runtime (`vintagize` rewrites every layer's paint) plus a graticule. Historical rasters (Carte de Cassini, Carte d'état-major) are IGN Géoplateforme WMTS tiles (`data.geopf.fr/wmts`, no key, PM tile matrix set). All modes are layers in one style, shown or hidden on switch (no `setStyle`). Tile errors from a raster source show a warning in the panel.
+
 ## Patterns in each day's `app.js`
 
 - **State → render**: a `points` array is the single source of truth. `update()` = `renderScene()` (rebuild the `data` FeatureCollections, `setSources`) + `renderCoordTable(...)`. The table's `onEdit` calls only `renderScene()` so inputs keep focus while typing.
